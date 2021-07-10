@@ -1,4 +1,4 @@
-package com.example.bcsddesignpattern
+package com.example.mvvmdesignpattern
 
 import org.junit.Test
 

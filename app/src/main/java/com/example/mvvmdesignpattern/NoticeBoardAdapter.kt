@@ -1,4 +1,4 @@
-package com.example.bcsddesignpattern
+package com.example.mvvmdesignpattern
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mvvmdesignpattern.databinding.NoticeboardRecyclerBinding
 
 class NoticeBoardAdapter(private val context: Context) : RecyclerView.Adapter<NoticeBoardAdapter.ViewHolder>() {
     var datas = mutableListOf<NoticeBoardData>()
     override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.noticeboard_recycler,parent,false))
+        val binding = NoticeboardRecyclerBinding.inflate(
+                LayoutInflater.from(context), parent, false)
+        return ViewHolder(binding)
     }
     interface OnitemClickListener{
         fun onItemClick(view : View, data : NoticeBoardData, position : Int)
@@ -24,20 +27,15 @@ class NoticeBoardAdapter(private val context: Context) : RecyclerView.Adapter<No
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
     }
-    fun additem(data : NoticeBoardData){
-        datas.add(data)
+    fun setData(dataList : ArrayList<NoticeBoardData>){
+        datas = dataList
         notifyDataSetChanged()
     }
-    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        private var title : TextView = itemView.findViewById(R.id.title)
-        private var writer : TextView = itemView.findViewById(R.id.writer)
-        private var writingTime : TextView = itemView.findViewById(R.id.writingTime)
+    inner class ViewHolder(val binding : NoticeboardRecyclerBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : NoticeBoardData){
-            title.text = item.title
-            writer.text = item.writer
-            writingTime.text = item.writingTime
+            binding.noticeData =item
             val position = adapterPosition
-            if(position!=RecyclerView.NO_POSITION){
+            if(position!= RecyclerView.NO_POSITION){
                 itemView.setOnClickListener{
                     listener?.onItemClick(itemView, item, position)
                 }
